@@ -9,9 +9,11 @@ sw/hello.elf: sw/start.S sw/hello.c sw/link.ld
 	$(CROSS)-gcc $(CFLAGS) sw/start.S sw/hello.c -o $@
 
 obj_dir/Vtop: sw/hello.hex new_rtl/top.v new_rtl/memory.v $(PICORV32)
-	verilator --binary -j 0 -Wall -Wno-fatal \
+	verilator --cc -Wall -Wno-fatal \
 	    --top-module top \
 	    $(PICORV32) new_rtl/memory.v new_rtl/top.v \
+	    --exe sim/testbench.cpp \
+	    --build -j 0 \
 	    -o Vtop
 
 sim: obj_dir/Vtop
@@ -19,10 +21,7 @@ sim: obj_dir/Vtop
 
 all: obj_dir/Vtop sim
 
-disasm: sw/hello.elf
-	$(CROSS)-objdump -d $
-
 clean:
 	rm -rf obj_dir sw/hello.elf sw/hello.hex
 
-.PHONY: sim all disasm clean
+.PHONY: sim all clean
