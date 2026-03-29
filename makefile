@@ -20,11 +20,12 @@ sw/hello.elf: sw/start.S sw/hello.c sw/link.ld
 # Hardware: Verilator compile
 # ──────────────────────────────────────────
 obj_dir/Vtop: sw/hello.hex new_rtl/top.v new_rtl/memory.v $(PICORV32) sim/testbench.cpp
-	verilator --binary -j 0 -Wall \
-	    --top-module top \
-	    $(PICORV32) new_rtl/memory.v new_rtl/top.v \
-	    --exe sim/testbench.cpp \
-	    -o Vtop
+	
+verilator --binary -j 0 -Wall -Wno-fatal \
+    --top-module top \
+    picorv32.v new_rtl/memory.v new_rtl/top.v \
+    --exe sim/testbench.cpp \
+    -o Vtop
 	@echo "[hw] verilator build done"
 
 # ──────────────────────────────────────────
