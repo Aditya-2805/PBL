@@ -23,24 +23,43 @@ module top (
     wire [31:0] mem_rdata;
 
     /* ------- PicoRV32 core ------- */
-    picorv32 #(
-        .STACKADDR(32'h0001_FFFC),   /* top of RAM */
-        .PROGADDR_RESET(32'h0),      /* reset vector */
-        .ENABLE_MUL(0),
-        .ENABLE_DIV(0),
-        .COMPRESSED_ISA(1)           /* enable C extension (rv32imc) */
-    ) cpu (
-        .clk       (clk),
-        .resetn    (resetn),
-        .mem_valid (mem_valid),
-        .mem_instr (mem_instr),
-        .mem_ready (mem_ready),
-        .mem_addr  (mem_addr),
-        .mem_wdata (mem_wdata),
-        .mem_wstrb (mem_wstrb),
-        .mem_rdata (mem_rdata)
-    );
+  picorv32 #(
+    .STACKADDR(32'h0001_FFFC),
+    .PROGADDR_RESET(32'h0),
+    .ENABLE_MUL(0),
+    .ENABLE_DIV(0),
+    .COMPRESSED_ISA(1)
+) cpu (
+    .clk       (clk),
+    .resetn    (resetn),
+    .mem_valid (mem_valid),
+    .mem_instr (mem_instr),
+    .mem_ready (mem_ready),
+    .mem_addr  (mem_addr),
+    .mem_wdata (mem_wdata),
+    .mem_wstrb (mem_wstrb),
+    .mem_rdata (mem_rdata),
 
+    // these were missing — tie them off
+    .trap         (),          // output, don't care
+    .mem_la_read  (),          // output, don't care
+    .mem_la_write (),
+    .mem_la_addr  (),
+    .mem_la_wdata (),
+    .mem_la_wstrb (),
+    .pcpi_valid   (),          // coprocessor — not using
+    .pcpi_insn    (),
+    .pcpi_rs1     (),
+    .pcpi_rs2     (),
+    .pcpi_wr      (1'b0),      // inputs must be driven
+    .pcpi_rd      (32'h0),
+    .pcpi_wait    (1'b0),
+    .pcpi_ready   (1'b0),
+    .irq          (32'h0),     // no interrupts
+    .eoi          (),
+    .trace_valid  (),
+    .trace_data   ()
+);
     /* ------- Address decode ------- */
     wire sel_mem  = (mem_addr[31:17] == 0);          /* 0x0000_0000 - 0x0001_FFFF */
     wire sel_uart = (mem_addr == 32'h1000_0000);
