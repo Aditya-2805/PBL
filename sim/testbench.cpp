@@ -2,7 +2,7 @@
 #include "verilated.h"
 #include <iostream> 
 
-#define MAX_CYCLES 1_000_000
+#define MAX_CYCLES 1000000
 
 int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
