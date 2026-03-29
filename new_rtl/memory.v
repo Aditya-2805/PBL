@@ -9,14 +9,14 @@ module memory #(
     output reg [31:0] rdata,
     output reg        ready
 );
-    reg [31:0] mem [0:32767];
+   reg [31:0] mem [0:65535];
 
     initial begin
         $readmemh(HEX_FILE, mem);
         $display("[mem] first word = %08x", mem[0]);
     end
 
-    wire [14:0] word_addr = addr[16:2];
+    wire [15:0] word_addr = addr[17:2];
 
     always @(posedge clk) begin
         ready <= 0;

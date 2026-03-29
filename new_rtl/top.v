@@ -57,7 +57,7 @@ module top (
         .trace_data   ()
     );
 
-    wire sel_mem  = (mem_addr[31:17] == 0);
+    wire sel_mem  = (mem_addr[31:18] == 0);
     wire sel_uart = (mem_addr == 32'h1000_0000);
 
     wire [31:0] mem_rdata_mem;
