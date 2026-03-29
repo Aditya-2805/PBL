@@ -98,4 +98,12 @@ module top (
         end
     end
 
+     integer dbg_cycle = 0;
+    always @(posedge clk) begin
+        dbg_cycle <= dbg_cycle + 1;
+        if (dbg_cycle < 20)
+            $display("[boot] cycle=%0d resetn=%b valid=%b ready=%b addr=%08x sel_mem=%b",
+                     dbg_cycle, resetn, mem_valid, mem_ready, mem_addr, sel_mem);
+    end
+
 endmodule
