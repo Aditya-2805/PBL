@@ -8,11 +8,10 @@ sw/hello.hex: sw/hello.elf
 sw/hello.elf: sw/start.S sw/hello.c sw/link.ld
 	$(CROSS)-gcc $(CFLAGS) sw/start.S sw/hello.c -o $@
 
-obj_dir/Vtop: sw/hello.hex new_rtl/top.v new_rtl/memory.v $(PICORV32) sim/testbench.cpp
+obj_dir/Vtop: sw/hello.hex new_rtl/top.v new_rtl/memory.v $(PICORV32)
 	verilator --binary -j 0 -Wall -Wno-fatal \
 	    --top-module top \
 	    $(PICORV32) new_rtl/memory.v new_rtl/top.v \
-	    --exe sim/testbench.cpp \
 	    -o Vtop
 
 sim: obj_dir/Vtop
