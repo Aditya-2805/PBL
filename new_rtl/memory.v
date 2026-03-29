@@ -19,6 +19,11 @@ module memory #(
         $readmemh(HEX_FILE, mem);
     end
 
+    initial begin
+    $readmemh("sw/hello.hex", mem);
+    $display("[mem] first word = %08x", mem[0]);
+end 
+
     wire [14:0] word_addr = addr[16:2];  /* drop byte bits, drop bit 17+ */
 
     always @(posedge clk) begin
